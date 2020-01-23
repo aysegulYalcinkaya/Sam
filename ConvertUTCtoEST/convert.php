@@ -106,10 +106,10 @@ function checkInterval($currentTime, $currentValue, $fileToConvert)
 
                 return;
             } else {
-                echo "SPLIT FILES\n";
                 writeToLog($fileToConvert, "SPLIT FILE");
                 $fileToConvert->splitOutFile($currentTime, $currentValue);
                 fwrite($fileToConvert->outfile, $fileToConvert->header);
+                fwrite($fileToConvert->fiveMinFile, $fileToConvert->header);
 
                 return;
             }
@@ -122,6 +122,9 @@ function checkInterval($currentTime, $currentValue, $fileToConvert)
 function checkSpike(&$timeValue, &$value, $fileToConvert)
 {
     if ($fileToConvert->prevValueSpike != "") {
+        if (!(is_numeric($value) and is_numeric($fileToConvert->prevValueSpike))){
+            echo $timeValue."-->Not numeric ".$value ."--".$fileToConvert->prevValueSpike."\n";
+        }
         if ($value / $fileToConvert->prevValueSpike > $fileToConvert->spikeRatioMax or $value / $fileToConvert->prevValueSpike < $fileToConvert->spikeRatioMin) {
             writeToLog($fileToConvert, "Spike removed at " . $timeValue . " due to ratio=" . $value ."/". $fileToConvert->prevValueSpike ."=".$value / $fileToConvert->prevValueSpike. "\n");
             $value = $fileToConvert->prevValueSpike;
