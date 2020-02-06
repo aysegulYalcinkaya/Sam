@@ -21,14 +21,16 @@ class fileToConvert
 
     var $prevValueSpike;
 
-    var $spikeRatioMax;
-
-    var $spikeRatioMin;
+    var $spikeBias;
 
     var $logfile;
 
     var $header;
-
+    
+    var $fiveMinArray;
+    
+    var $nextMin;
+    
     function __construct($file, $outfolder)
     {
         $this->fname = substr($file, strrpos($file, "/") + 1);
@@ -40,6 +42,8 @@ class fileToConvert
                 $this->prevTime = "";
                 $this->prevValue = "";
                 $this->prevValueSpike = "";
+                $this->fiveMinArray=array();
+                
             } else {
                 echo "Unable to open " . $file . "\n";
                 exit();
