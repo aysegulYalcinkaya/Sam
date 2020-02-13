@@ -15,8 +15,8 @@ switch ($argc) {
         break;
     default:
         echo "****************************** USAGE ********************************************************\n\n";
-        echo "USAGE 1==> php convert.php <input_folder> <solar_file> <darksky_file> <ecobee_folder>\n";
-        echo "USAGE 2==> php convert.php <input_folder> <solar_file> <darksky_file> <ecobee_folder> <output_folder> \n\n";
+        echo "USAGE 1==> php merge.php <input_folder> <solar_file> <darksky_file> <ecobee_folder>\n";
+        echo "USAGE 2==> php merge.php <input_folder> <solar_file> <darksky_file> <ecobee_folder> <output_folder> \n\n";
         echo "**********************************************************************************************\n";
         exit();
 }
@@ -33,12 +33,12 @@ $ecobee->makeOneEcobee();
 $ecobee->ecobeeFile=$ecobee->interpolate5MinEcobee();
 $ecobee->ecobeeFile=$ecobee->interpolateEcobee();
 
-$fileToSpike = new fileToSpike("C:/Users/win10/Documents/Upwork/SamMhanna/DATACONVERSION/ecobee/total_ecobee_interpolated.csv", "C:/Users/win10/Documents/Upwork/SamMhanna/DATACONVERSION/ecobee/");
+$fileToSpike = new fileToSpike($ecobeeFolder."total_ecobee_interpolated.csv", $ecobeeFolder);
 $fileToSpike->removeSpike(4);
 
 $ecobee->ecobeeFile=fopen($fileToSpike->spikeFileFullName, "r");
 
-$plotData=new plotData("C:/Users/win10/Documents/Upwork/SamMhanna/DATACONVERSION/ecobee/total_ecobee_interpolated.csv", "C:/Users/win10/Documents/Upwork/SamMhanna/DATACONVERSION/ecobee/spikeremoved_total_ecobee_interpolated.csv");
+$plotData=new plotData($ecobeeFolder."total_ecobee_interpolated.csv", $ecobeeFolder."spikeremoved_total_ecobee_interpolated.csv");
 $plotData->createGraph(1,4,4);
 
 $fileList = glob($folder . 'mergedFiveMin*.csv');
